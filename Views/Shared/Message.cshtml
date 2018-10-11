@@ -1,0 +1,33 @@
+@{
+Layout = "_Layout";
+}
+<div class="row" class="text-center" style="margin:15px;">
+	<div class="container py-5">
+		<div class="row">
+			<div class="col-md-10 mx-auto">
+				@{
+					if(ViewBag.result!=null){
+						var result=ViewBag.result;
+						if(result.Success){
+							<h2 style="color:#28a745;">
+								<i class="fa fa-check-circle" aria-hidden="true"></i>
+								Successful
+							</h2>
+						}else{
+							<h2 style="color:#dc3545;">
+								<i class="fa fa-chain-broken" aria-hidden="true"></i>
+
+								Warning
+							</h2>
+						}
+						<p>
+                   			 @ViewBag.result.Message
+                		</p>
+					}
+				}
+				<br>
+				<a asp-controller="AvailableBloodSample" asp-action="Index">Back to page</a>
+            </div>
+        </div>
+    </div>
+</div> 

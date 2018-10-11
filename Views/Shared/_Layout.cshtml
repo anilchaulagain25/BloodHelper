@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Blood Help</title>
+    <link rel="shortcut icon" type="image/x-icon" href="~/blood_icon.png" />
+    <link href="~/css/site.min.css" rel="stylesheet" />
+  </head>
+  <body>
+    <nav class="site-header sticky-top py-1">
+      <div class="container d-flex flex-column flex-md-row justify-content-between">
+        <a class="py-1" asp-controller="Home" asp-action="Index">
+          <img src="~/blood_icon.png" asp-append-version="true" style="height: 30px;width:30px;">
+        </a>
+        <a class="py-1 d-none d-md-inline-block" asp-controller="Home" asp-action="Index">Home</a>
+        <a class="py-1 d-none d-md-inline-block" asp-controller="AvailableBloodSample" asp-action="Index">Available Bloods</a>
+        <a class="py-1 d-none d-md-inline-block" asp-controller="BloodSample" asp-action="Manage">Add Blood Info</a>
+        <a class="py-1 d-none d-md-inline-block" asp-controller="Receiver" asp-action="Login">Receivers</a>
+        <a class="py-1 d-none d-md-inline-block" asp-controller="Hospital" asp-action="Login">Hospitals</a>
+        <a class="py-1 d-none d-md-inline-block" asp-controller="BloodRequest" asp-action="Index">Request List</a>
+      </div>
+    </nav>
+        @RenderBody()
+
+    <footer style="margin: 30px;margin-top: 0px;">
+      <hr>
+      <div style="text-align: right;">
+          <img src="~/blood_icon.png" asp-append-version="true" style="height: 15px;width:15px;">
+        2018-@DateTime.Now.Year &copy; Blood Helper
+
+      </div>
+    </footer>
+  <script type="text/javascript" src="~/js/site.min.js"></script>
+  @RenderSection("Scripts",required:false)
+</body>
+</html>

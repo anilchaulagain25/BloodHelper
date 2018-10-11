@@ -1,0 +1,211 @@
+@model BLOOD_HELP.Models.BloodSampleModel
+@{
+Layout = "_Layout";
+}
+
+<div class="row" class="text-center" style="margin:15px;">
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-md-10 mx-auto">
+                <h2>
+                    Manage Blood Sample
+                </h2>
+                <br>
+                <form asp-controller="BloodSample" asp-action="Manage" method="POST"> 
+                    @{
+					if(ViewBag.result!=null) {
+					BLOOD_HELP.Models.ResultSet res=ViewBag.result;
+                       
+					if(res.Success){
+
+					<div class="alert alert-success" role="alert">
+						<strong>Well done!</strong> @res.Message
+					</div>				
+				    }
+				    else {
+                    <div class="alert alert-danger" role="alert">
+                        <strong>Oh snap!</strong> @res.Message
+                    </div>
+			        }
+                    }
+                    }
+                    <div class="form-group row">
+                        <div class="col-sm-4">
+                            <label asp-for="BloodGroup">Blood Group</label>
+                            <select asp-for="BloodGroup" class="form-control">
+                                <option value="">Select Blood Group</option>
+                                <option value="O+">O+</option>
+                                <option value="O-">O-</option>
+                                <option value="A+">A+</option>
+                                <option value="A-">A-</option>
+                                <option value="B+">B+</option>
+                                <option value="B-">B-</option>
+                                <option value="AB+">AB+</option>
+                                <option value="AB-">AB-</option>
+                            </select>
+                            <span asp-validation-for="BloodGroup" class="text-danger"></span>
+                        </div>
+                        <div class="col-sm-4">
+                            <label asp-for="Amount">Amount</label>
+
+                            <input type="text" class="form-control" asp-for="Amount" placeholder="Amount">
+                            <span asp-validation-for="Amount" class="text-danger"></span>
+                        </div>
+                        <div class="col-sm-4">
+                            <label asp-for="Unit">Unit</label>
+                            <input type="text" class="form-control" asp-for="Unit" placeholder="Unit">
+                            <span asp-validation-for="Unit" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-4">
+                            <label asp-for="BloodPropertyOne">White Cells</label>
+                            <input type="text" class="form-control" asp-for="BloodPropertyOne" placeholder="White Cells">
+                            <span asp-validation-for="BloodPropertyOne" class="text-danger"></span>
+                        </div>
+                        <div class="col-sm-4">
+                            <label asp-for="BloddPropertyTwo">Red Cells</label>
+                            <input type="text" class="form-control" asp-for="BloddPropertyTwo" placeholder="Red Cells">
+                            <span asp-validation-for="BloddPropertyTwo" class="text-danger"></span>
+                        </div>
+                        <div class="col-sm-4">
+                            <label asp-for="BloodPropertyThree">Platelets</label>
+                            <input type="text" class="form-control" asp-for="BloodPropertyThree" placeholder="Platelets">
+                            <span asp-validation-for="BloodPropertyThree" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <label asp-for="ContactNo">Contact No</label>
+                            <input type="text" class="form-control" asp-for="ContactNo" placeholder="Contact No">
+                            <span asp-validation-for="ContactNo" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-10">
+                            <label asp-for="Location">Available Location</label>
+                            <input type="text" class="form-control" asp-for="Location" placeholder="Location">
+                            <span asp-validation-for="Location" class="text-danger"></span>
+                        </div>
+                        <div class="col-sm-2" style="margin-top: 31px;">
+                            <button onclick="ShowMap()" data-toggle="modal" data-target="#divGoogleMap" type="button" class="btn btn-info"><i class="fa fa-map" aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+                    <input type="hidden" value="0" asp-for="Latitude" />
+                    <input type="hidden" value="0" asp-for="Longitude" />
+                    <button type="submit" class="btn btn-primary px-4">Add Blood Sample</button>
+                    &nbsp;&nbsp;&nbsp;
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade"  id="divGoogleMap"  tabindex="-1" role="dialog" aria-labelledby="divGoogleMap" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Google Map</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" >
+         <div id="map" style="width: 100%;height: 400px;">
+
+		</div> 
+      </div>
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-primary">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>
+@section Scripts{
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDUo7ytcLrd9qif4T7PDVF-XKUNdOeojpY&libraries=places&callback=initMap"
+async defer></script>
+<script type="text/javascript">
+
+var $location;
+var $latitude;
+var $longitude;
+var $map;
+var $blood;
+var SetField=()=>{
+	$location=document.getElementById("Location");
+	$latitude=document.getElementById("Latitude");
+	$longitude=document.getElementById("Longitude");
+	$map=document.getElementById("map");
+	$blood=document.getElementById("BloodGroup");
+}
+var initMap=()=>{
+	SetField();
+	var places = new google.maps.places.Autocomplete($location);
+	google.maps.event.addListener(places, 'place_changed', function() {
+		var place = places.getPlace();
+		var address = place.formatted_address;
+		
+		var latitude = place.geometry.location.lat()
+		var longitude = place.geometry.location.lng();
+
+		$latitude.value=latitude;
+		$longitude.value=longitude;
+	});
+	google.maps.event.addDomListener($location, 'keydown', function(event) { 
+		if (event.keyCode === 13) { 
+			event.preventDefault(); 
+		}
+	}); 
+}
+
+var ShowMap=()=>{
+	SetField();
+	var latitude= $latitude.value||28.394857;
+	var longitude=$longitude.value||84.124008;
+
+	latitude=parseFloat(latitude);
+	longitude=parseFloat(longitude);
+
+	var myPos = {lat:latitude , lng:longitude };
+
+	var map = new google.maps.Map($map,{
+		zoom: 10,
+		center: myPos   
+	});
+    var marker = new google.maps.Marker({
+		position: myPos,
+		draggable:true,
+		title:$blood.value+" Blood"
+	});
+	marker.setMap(map);
+	google.maps.event.addListener(marker, 'dragend', function(evt){
+		SetField();
+        var geocoder = new google.maps.Geocoder();
+        geocoder.geocode({
+        latLng: marker.getPosition()
+        }, function(responses) {
+            if (responses) {
+            $location.value=(responses[0].formatted_address);
+        } 
+    });
+
+
+		$latitude.value=evt.latLng.lat();
+		$longitude.value=evt.latLng.lng();
+	});
+};
+$(document).ready(function(){
+	SetField();
+	if (navigator.geolocation) {
+		navigator.geolocation.getCurrentPosition(function showPosition(position) {
+			$latitude.value=position.coords.latitude ;
+			$longitude.value=position.coords.longitude;
+		});
+	} 
+});
+</script>
+} 
